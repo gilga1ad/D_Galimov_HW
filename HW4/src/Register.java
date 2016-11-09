@@ -1,6 +1,6 @@
 import com.sun.rowset.JdbcRowSetImpl;
 
-import javax.sql.RowSet;
+import javax.sql.rowset.JdbcRowSet;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -9,7 +9,7 @@ import java.sql.Statement;
 public class Register {
 
     private Connection connection;
-    private RowSet jdbcRs;
+    private JdbcRowSet jdbcRs;
 
     public Register(final String URL, final String USERNAME, final String PASSWORD) {
         try {
@@ -24,8 +24,8 @@ public class Register {
         try (Statement createStorage = connection.createStatement()) {
             String createString = "CREATE TABLE " + nameStorage +
                     " (" +
-                    "product_no integer, " +
-                    "name text PRIMARY KEY, " +
+                    "product_no integer PRIMARY KEY, " +
+                    "name text, " +
                     "description  text, " +
                     "price numeric" +
                     ");";
@@ -43,10 +43,10 @@ public class Register {
         jdbcRs.setCommand("SELECT * FROM " + nameStorage + ";");
         jdbcRs.execute();
         jdbcRs.moveToInsertRow();
-        jdbcRs.setInt("product_no", product.getProduct_no());
-        jdbcRs.setString("name", product.getName());
-        jdbcRs.setString("description", product.getDescription());
-        jdbcRs.setDouble("price", product.getPrice());
+        jdbcRs.updateInt("product_no", product.getProduct_no());
+        jdbcRs.updateString("name", product.getName());
+        jdbcRs.updateString("description", product.getDescription());
+        jdbcRs.updateDouble("price", product.getPrice());
         jdbcRs.insertRow();
     }
 
